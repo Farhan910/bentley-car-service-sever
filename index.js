@@ -37,11 +37,12 @@ function verifyJWT(req, res, next) {
 async function run() {
   try {
     await client.connect();
+    console.log('db connected');
     const productCollection = client
       .db("bentley-car-service")
       .collection("products");
 
-    await client.connect();
+    
     const reviewCollection = client
       .db("bentley-car-service")
       .collection("reviews");
@@ -92,7 +93,7 @@ async function run() {
       const query = {};
       const cursor = reviewCollection.find(query);
       const reviews = await cursor.toArray();
-      res.send(reviews);
+      res.send(reviews.reverse());
     });
 
     app.post("/review", async (req, res) => {
@@ -219,8 +220,10 @@ async function run() {
           phone: total.phone,
           quantity: total.quantity,
           price: total.price,
+          email: total.email
         },
       };
+      
       
       const result = purchaseCollection.updateOne(filter, updateDoc, options);
       res.send(result);
@@ -244,21 +247,21 @@ async function run() {
       );
       res.send(updatedPurchase);
     });
-    app.get("/purchase/:id", async (req, res) => {
+    app.get("/purchase/:id",verifyJWT, async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id)};
       const products = await purchaseCollection.findOne(query);
       res.send(products);
       
     })
-    app.get("/purchase", async (req, res) => {
+    app.get("/purchase",verifyJWT, async (req, res) => {
       const query = {};
       const cursor = purchaseCollection.find(query);
       const purchases = await cursor.toArray();
       res.send(purchases);
     })
 
-    app.get("/purchase/:email", async (req, res) => {
+    app.get("/purchase/:email",verifyJWT, async (req, res) => {
       const email = req.params.email;
       const query = { email: email};
       const cursor = purchaseCollection.find(query);
