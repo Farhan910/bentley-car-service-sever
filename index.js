@@ -101,7 +101,6 @@ async function run() {
 
       const result = await reviewCollection.insertOne(review);
       res.send(result);
-      
     });
 
     app.get("/product/:id",verifyJWT, async (req, res) => {
