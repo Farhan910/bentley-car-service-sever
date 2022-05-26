@@ -101,7 +101,6 @@ async function run() {
 
       const result = await reviewCollection.insertOne(review);
       res.send(result);
-      
     });
 
     app.get("/product/:id",verifyJWT, async (req, res) => {
@@ -122,7 +121,6 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
-     
     })
 
     app.get("/user",verifyJWT, async (req, res) => {
