@@ -261,12 +261,13 @@ async function run() {
       res.send(purchases);
     })
 
-    app.get("/purchase/:email",verifyJWT, async (req, res) => {
+    app.get("/purchase/email",verifyJWT, async (req, res) => {
       const email = req.params.email;
       const query = { email: email};
-      const cursor = purchaseCollection.find(query);
+      const cursor = purchaseCollection.findOne(query);
       const purchases = await cursor.toArray();
       res.send(purchases);
+      console.log(email);
     })
   } finally {
   }
