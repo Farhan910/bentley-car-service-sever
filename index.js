@@ -257,6 +257,14 @@ async function run() {
       const purchases = await cursor.toArray();
       res.send(purchases);
     })
+
+    app.get("/purchase/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email};
+      const cursor = purchaseCollection.find(query);
+      const purchases = await cursor.toArray();
+      res.send(purchases);
+    })
   } finally {
   }
 }
